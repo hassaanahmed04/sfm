@@ -35,7 +35,18 @@ In our SfM pipeline, we evaluated three feature detection and matching combinati
 
 These choices were guided by best practices from OpenCV and a research paper: [A Blender plug-in for comparing Structure from Motion pipelines](https://www.researchgate.net/publication/329751459_A_Blender_plug-in_for_comparing_Structure_from_Motion_pipelines).
 
-| <img src="./images/sift_bf.png" width="300"/>  | <img src="./images/akaze_bf.png" width="300"/> | <img src="./images/orb_bf.png" width="300"/> | 
+<table>
+  <tr>
+    <td><img src="./images/sift_bf.png" width="300"/></td>
+    <td><img src="./images/akaze_bf.png" width="300"/></td>
+    <td><img src="./images/orb_bf.png" width="300"/></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>SIFT + BFMatcher</strong></td>
+    <td align="center"><strong>AKAZE + BFMatcher</strong></td>
+    <td align="center"><strong>ORB + BFMatcher</strong></td>
+  </tr>
+</table>
 
 ## Feature Matching Results
 
