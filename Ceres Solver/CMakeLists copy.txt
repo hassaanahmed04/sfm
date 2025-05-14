@@ -1,0 +1,30 @@
+cmake_minimum_required(VERSION 3.10)
+project(Reconstruction)
+
+# Find packages
+find_package(Ceres REQUIRED)
+find_package(OpenCV REQUIRED)
+find_package(Eigen3 REQUIRED)
+find_package(Boost 1.83 REQUIRED COMPONENTS system filesystem)
+find_package(CURL REQUIRED)
+
+# Include directories
+include_directories(${OpenCV_INCLUDE_DIRS}${EIGEN3_INCLUDE_DIRS})
+
+# Print found packages for debugging  
+message(STATUS "OpenCV found: ${OpenCV_VERSION}")
+message(STATUS "Boost found at ${Boost_INCLUDE_DIRS}")
+message(STATUS "Boost libraries: ${Boost_LIBRARIES}")
+message(STATUS "CURL found: ${CURL_VERSION}")
+
+# Add executable
+add_executable(reconstruction main.cpp)
+
+# Link libraries AFTER defining the target
+target_link_libraries(reconstruction
+    ${CERES_LIBRARIES}
+    ${OpenCV_LIBS}
+    Boost::system
+    Boost::filesystem
+    ${CURL_LIBRARIES}
+)

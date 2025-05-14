@@ -1,0 +1,3 @@
+/home/hassaan-ahmed/Desktop/demoo/build/CMakeFiles/reconstruction.dir
+/home/hassaan-ahmed/Desktop/demoo/build/CMakeFiles/edit_cache.dir
+/home/hassaan-ahmed/Desktop/demoo/build/CMakeFiles/rebuild_cache.dir
