@@ -58,6 +58,7 @@ Based on the results, **SIFT combined with BFMatcher and KNN** yielded the most 
 
 #### 1) Camera Pose Initialization
 We fix the first camera as the origin using an identity pose:
+
 $$
 P_0 = K \cdot [I \mid 0]
 $$
@@ -178,7 +179,7 @@ Applied to the **Gustav II Adolf statue** dataset, this method resulted in:
 </table>
 **Bundle Adjustment** was applied to refine both camera parameters and the structure, significantly improving reconstruction accuracy.
 
-## 2. Global Optimization via Bundle Adjustment
+## 2. Bundle Adjustment
 
 After initial 3D reconstruction, reprojection errors can be high.  
 To refine both **3D points** and **camera parameters**, we apply **Bundle Adjustment (BA)**—a nonlinear least-squares optimization that minimizes reprojection error across all views.
@@ -207,28 +208,16 @@ We implemented **Bundle Adjustment** using `SciPy`’s `least_squares` function 
 - **Levenberg-Marquardt (LM)**
 
 ---
-
-### TRF-Based Bundle Adjustment
-
-The **TRF solver** optimizes within a dynamic trust region, making it robust for large, sparse problems.
-
-We used the following parameters:
-
 ```python
 variables
-method='trf'
-loss='huber'        # Robust to outliers like Linear, 
+method='trf'        # Can change methods like trf,lm or dogbox
+loss='huber'        # Robust to outliers like Linear, huber, soft_l1
 f_scale=1.0
 ftol=1e-6
 xtol=1e-6
 gtol=err_thresh
 max_nfev=200
 ```
-
-Using a basic **Linear loss**, the optimization achieved significantly lower reprojection error than sequential reconstruction.
-
-- **Processing time** for 55 images: **~4 minutes 46 seconds**
-
 
 <table>
   <thead>
@@ -241,6 +230,7 @@ Using a basic **Linear loss**, the optimization achieved significantly lower rep
     </tr>
   </thead>
   <tbody>
+    <tr><td colspan="5" style="text-align:center; font-weight:bold; background:#f0f0f0;"><b>TRF-Based Bundle Adjustment</b></td></tr>
     <tr>
       <td>Linear</td>
       <td><img src="https://github.com/user-attachments/assets/6c5fb084-e4d7-4d44-b36a-ff248f82931e" width="200"/></td>
@@ -269,7 +259,73 @@ Using a basic **Linear loss**, the optimization achieved significantly lower rep
     <td>17626</td>
     <td>00:03:05</td>
    </tr>
-
+    <tr><td colspan="5" style="text-align:center; font-weight:bold; background:#f0f0f0;"><b>Dogbox</b></td></tr>
+<tr>
+      <td>Soft L1</td>
+      <td><img src="https://github.com/user-attachments/assets/2e846fa3-1631-4166-aa8f-ff7438aae003" width="200"/></td>
+      <td><img src="https://github.com/user-attachments/assets/a388a8a5-fd1a-46b6-9d5d-7e8a672e56ae" width="200"/></td>
+      <td>17626</td>
+      <td>00:02:34</td>
+    </tr>
+      <tr>
+      <td>Huber</td>
+      <td><img src="https://github.com/user-attachments/assets/20645b17-c827-4b89-a39e-f299ada798dc" width="200"/></td>
+      <td><img src="https://github.com/user-attachments/assets/377fd643-a3f4-45fa-b165-9884c77bdb2c" width="200"/></td>
+           <td>17626</td>
+<td>00:02:20</td>
+    </tr>
+    <tr><td colspan="5" style="text-align:center; font-weight:bold; background:#f0f0f0;"><b>Levenberg–Marquardt (LM) algorithm</b>b></td></tr>
+<tr>
+      <td>Linear</td>
+      <td><img src="https://github.com/user-attachments/assets/aa2dae84-9c63-46cd-a181-38adf334925c" width="200"/></td>
+      <td><img src="https://github.com/user-attachments/assets/c7631bc3-49db-44c3-ac7a-be5e40188df0" width="200"/></td>
+      <td>15419</td>
+      <td>00:03:31</td>
+    </tr>
   </tbody>
 </table>
 
+
+Bundle adjustment using TRF and LM methods yields reliable results, but performance depends on trade-offs between speed, accuracy, and parameter tuning. TRF with linear or Cauchy loss was fastest and most accurate, while LM was slower but still effective. Proper tuning is key for optimal results.
+
+## Final Output using TRF with Cauchy Loss Function 
+
+## Camera Calibration for Custom Dataset
+
+Calibrating our smartphones was crucial for applying **Structure from Motion (SfM)** to our dataset. Guided by a YouTube video titled *“Structure from Motion: How to Process SfM Datasets,”* we fixed the following camera settings for consistency (used where applicable):
+
+- **ISO**: 100  
+- **Shutter Speed**: 1/20  
+- **Focus**: 0.78  
+- **White Balance**: 5000  
+
+We used two devices for data collection and calibration:
+
+- **OPPO RENO 5**: [Calibration Dataset (16 images)](https://)  
+- **iPhone 8 Plus**: [Calibration Dataset (37 images)](https://)  
+
+Images of a checkerboard pattern were captured from multiple angles for each device to compute the **intrinsic camera parameters** required for accurate 3D reconstruction.
+---
+
+## Creating a Custom Dataset
+
+Generating our dataset was the most challenging part of the project, involving both **indoor (controlled)** and **outdoor (natural)** environments.
+
+### Closed Environment (Indoor)
+
+- Phone fixed in position  
+- Stabilized lighting conditions  
+- Object placed on a rotating plate with marked intervals
+- Images captured at each interval while the object rotated and the camera remained stationary
+
+
+### Open Environment (Outdoor)
+
+- Object static  
+- Phone moved around the object to capture images from all angles  
+
+### Preprocessing Step
+
+In both indoor and outdoor datasets, we can **remove the background** from the images as an optional **preprocessing step** to improve reconstruction accuracy. While not mandatory, it significantly reduced noise and improved point cloud clarity.
+
+In all cases, we maintained the **same camera settings** as during calibration to ensure consistent and reliable reconstruction.
