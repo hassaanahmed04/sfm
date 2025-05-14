@@ -263,7 +263,7 @@ Using a basic **Linear loss**, the optimization achieved significantly lower rep
       <td>00:02:20</td>
     </tr>
    <tr>
-    <td>Cauchy <br/><small><em>(also used in Ceres Solver)</em></small></td>
+    <td>Cauchy <br/><small><em>(also used in [Ceres Solver](https://github.com/hassaanahmed04/sfm/tree/main/Ceres%20Solver/main.cpp))</em></small></td>
     <td><img src="https://github.com/user-attachments/assets/f8081184-f364-43ca-a0b0-3196c3e55470" width="200"/></td>
     <td><img src="https://github.com/user-attachments/assets/e311bd09-a019-4066-859f-fc0a11733b04" width="200"/></td>
     <td>17626</td>
