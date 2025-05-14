@@ -13,7 +13,7 @@ Structure from Motion (SfM) is a computer vision and photogrammetry technique th
 
 The flowchart shows the SfM pipeline we followed. In the final step, only one method was used at a time for reconstruction:
 
-- Ceres Solver  
+- Ceres Solver [API](https://github.com/hassaanahmed04/sfm/tree/main/Ceres%20Solver)
 - Bundle Adjustment (TRF, LM, Dogbox)  
 - Sequential Triangulation-based Reconstruction
 <img src="./images/Flowchart.png"  align="center" ><br>
