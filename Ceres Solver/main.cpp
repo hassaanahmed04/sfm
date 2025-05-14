@@ -1,4 +1,3 @@
-// Modified Ceres server code with CauchyLoss and consistent behavior with Python version
 #include <ceres/ceres.h>
 #include <iostream>
 #include <vector>
