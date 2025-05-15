@@ -292,16 +292,16 @@ Bundle adjustment using TRF and LM methods yields reliable results, but performa
 
 ## Camera Calibration for Custom Dataset
 
-Calibrating our smartphones was crucial for applying **Structure from Motion (SfM)** to our dataset. Guided by a YouTube video titled *“Structure from Motion: How to Process SfM Datasets,”* we fixed the following camera settings for consistency (used where applicable):
-
-- **ISO**: 100  
-- **Shutter Speed**: 1/20  
-- **Focus**: 0.78  
-- **White Balance**: 5000  
+Calibrating our smartphones was crucial for applying **Structure from Motion (SfM)** to our dataset. Guided by a YouTube video titled *“Structure from Motion: How to Process SfM Datasets,”* 
 
 We used two devices for data collection and calibration:
 
 - **OPPO RENO 5**: [Calibration Dataset (16 images)](https://)  
+  - We fixed the following camera settings for consistency (used where applicable):  
+    - **ISO**: 100  
+    - **Shutter Speed**: 1/20  
+    - **Focus**: 0.78  
+    - **White Balance**: 5000
 - **iPhone 8 Plus**: [Calibration Dataset (37 images)](https://)  
 
 Images of a checkerboard pattern were captured from multiple angles for each device to compute the **intrinsic camera parameters** required for accurate 3D reconstruction.
