@@ -324,7 +324,7 @@ Images of a checkerboard pattern were captured from multiple angles for each dev
 
 Generating our dataset was the most challenging part of the project, involving both **indoor (controlled)** and **outdoor (natural)** environments.
 
-![Duck](https://github.com/user-attachments/assets/e243c4c1-6047-4b0c-94f8-e5d060a6317b)
+![Duckg](https://github.com/user-attachments/assets/28a2f62e-059b-4c11-b513-7bf50fa01395)
 
 ### Preprocessing Step
 
