@@ -357,9 +357,9 @@ In both indoor and outdoor datasets, we can **remove the background** from the i
     <td><img src="https://github.com/user-attachments/assets/5065d514-d455-4a83-9580-c295304230aa" width="300"/></td>
   </tr>
   <tr>
-    <td align="center"><strong>Duck(66 Images)</strong></td>
-    <td align="center"><strong>Box(70 Images)</strong></td>
-    <td align="center"><strong>Tin(18 Images)</strong></td>
+    <td align="center"><strong>[Duck(66 Images)](https://github.com/hassaanahmed04/sfm/tree/main/Datasets/Duck)</strong></td>
+    <td align="center"><strong>[Box(70 Images)](https://github.com/hassaanahmed04/sfm/tree/main/Datasets/BOX)</strong></td>
+    <td align="center"><strong>[Tin(18 Images)](https://github.com/hassaanahmed04/sfm/tree/main/Datasets/Tin)</strong></td>
   </tr>
 </table>
 
@@ -379,3 +379,47 @@ In both indoor and outdoor datasets, we can **remove the background** from the i
   </table>
 
 In all cases, we maintained the **same camera settings** as during calibration to ensure consistent and reliable reconstruction.
+
+
+# Running the Project
+
+## Requirements Installation
+
+Ensure you have Python 3.8+ installed.
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+## Running the SfM Pipeline
+
+You can run the Structure from Motion pipeline using one of the following optimization methods:
+
+- 1. **No Optimization**
+Run the pipeline without optimization:
+
+```bash
+python run_sfm.py --method none --dataset Datasets/GustavIIAdolf
+python run_sfm.py # for default method and dataset
+```
+
+- 2. **Bundle Adjustment (Local Optimization)**
+Run the pipeline with local bundle adjustment:
+
+```bash
+python run_sfm.py --method bundle_adjust --dataset Datasets/GustavIIAdolf
+python run_sfm.py --method bundle_adjust # for default dataset
+```
+- 3. **Ceres Solver (Remote Optimization)**
+Before running this method, start your Ceres solver server:
+
+[Follow the official setup instructions for the Ceres Solver:](https://github.com/hassaanahmed04/sfm/tree/main/Ceres%20Solver)
+
+Once your Ceres server is running, run the pipeline with:
+
+```bash
+python run_sfm.py --method ceres --dataset Datasets/GustavIIAdolf
+python run_sfm.py --method ceres # for default dataset
+```
