@@ -9,6 +9,9 @@ Whether you're capturing a statue, surveying a landscape, or reimagining histori
 
 Structure from Motion (SfM) is a computer vision and photogrammetry technique that reconstructs the 3D structure of a scene and determines camera poses from a collection of 2D images. By identifying common features and solving mathematical equations, it transforms a set of images into a cohesive 3D representation, applicable in fields like 3D modeling, augmented reality, and historical landscape reconstruction. [Read more here](https://medium.com/@sepideh.92sh/unveiling-the-magic-of-3d-reconstruction-a-journey-through-structure-from-motion-sfm-in-c-d66bc1d01a96).
 
+![Duck-min](https://github.com/user-attachments/assets/0d409065-7341-4596-9005-a83401702a41)
+
+
 ## SFM Pipeline Overview
 
 The flowchart shows the SfM pipeline we followed. In the final step, only one method was used at a time for reconstruction:
@@ -33,7 +36,7 @@ In our SfM pipeline, we evaluated three feature detection and matching combinati
 - AKAZE with Hamming distance  
 - ORB with Hamming distance  
 
-These choices were guided by best practices from OpenCV and a research paper: [A Blender plug-in for comparing Structure from Motion pipelines](https://www.researchgate.net/publication/329751459_A_Blender_plug-in_for_comparing_Structure_from_Motion_pipelines).
+These choices were guided by best practices from [OpenCV](https://docs.opencv.org/4.x/dc/dc3/tutorial_py_matcher.html) and a research paper: [A Blender plug-in for comparing Structure from Motion pipelines](https://www.researchgate.net/publication/329751459_A_Blender_plug-in_for_comparing_Structure_from_Motion_pipelines).
 
 <table>
   <tr>
@@ -130,7 +133,7 @@ We estimate each new camera pose using:
 cv2.solvePnPRansac()
 ```
 
-This solves the **Perspective-n-Point (PnP)** problem using RANSAC, robust to outliers, and optimizes via the **Levenberg-Marquardt algorithm** to minimize reprojection error.
+This solves the **Perspective-n-Point (PnP)** problem using RANSAC, robust to outliers, and optimizes via the **Levenberg-Marquardt algorithm** to minimize reprojection error.[link](https://medium.com/@abdulhaq.ah/solvepnpransac-and-optimization-47a0683227b1)
 
 The `solve_pnp_prob()` function encapsulates this process and returns the camera's **rotation** and **translation**.
 
@@ -179,7 +182,7 @@ Applied to the **Gustav II Adolf statue** dataset, this method resulted in:
 </table>
 **Bundle Adjustment** was applied to refine both camera parameters and the structure, significantly improving reconstruction accuracy.
 
-## 2. Bundle Adjustment
+## Bundle Adjustment
 
 After initial 3D reconstruction, reprojection errors can be high.  
 To refine both **3D points** and **camera parameters**, we apply **Bundle Adjustment (BA)**—a nonlinear least-squares optimization that minimizes reprojection error across all views.
@@ -210,7 +213,7 @@ We implemented **Bundle Adjustment** using `SciPy`’s `least_squares` function 
 ---
 ```python
 variables
-method='trf'        # Can change methods like trf,lm or dogbox
+method='trf'        # Can change methods like trf, or dogbox
 loss='huber'        # Robust to outliers like Linear, huber, soft_l1
 f_scale=1.0
 ftol=1e-6
@@ -289,10 +292,19 @@ max_nfev=200
 Bundle adjustment using TRF and LM methods yields reliable results, but performance depends on trade-offs between speed, accuracy, and parameter tuning. TRF with linear or Cauchy loss was fastest and most accurate, while LM was slower but still effective. Proper tuning is key for optimal results.
 
 ## Final Output using TRF with Cauchy Loss Function 
+![Gustave](https://github.com/user-attachments/assets/01a69878-a54c-4080-8891-473edf8c5e20)
+
+## Ceres Implementation
+
+We also implemented bundle adjustment using the **Ceres Solver**. Although the current reprojection error remains high, we are actively working on improving it.
+
+Our implementation differs slightly: we hosted the Ceres bundle adjustment code locally using the **Crow** web framework to create a server, which we call from our main pipeline. 
+
+You can run the Ceres-based optimization via the provided local [link](https://github.com/hassaanahmed04/sfm/tree/main/Ceres%20Solver).
 
 ## Camera Calibration for Custom Dataset
 
-Calibrating our smartphones was crucial for applying **Structure from Motion (SfM)** to our dataset. Guided by a YouTube video titled *“Structure from Motion: How to Process SfM Datasets,”* 
+Calibrating our smartphones was crucial for applying **Structure from Motion (SfM)** to our dataset. Guided by a YouTube video titled [*“Structure from Motion: How to Process SfM Datasets,”*](https://www.youtube.com/watch?v=ViUILwG9jlo&t=1s)
 
 We used two devices for data collection and calibration:
 
@@ -312,6 +324,12 @@ Images of a checkerboard pattern were captured from multiple angles for each dev
 
 Generating our dataset was the most challenging part of the project, involving both **indoor (controlled)** and **outdoor (natural)** environments.
 
+![Duck](https://github.com/user-attachments/assets/e243c4c1-6047-4b0c-94f8-e5d060a6317b)
+
+### Preprocessing Step
+
+In both indoor and outdoor datasets, we can **remove the background** from the images as an optional **preprocessing step** to improve reconstruction accuracy. While not mandatory, it significantly reduced noise and improved point cloud clarity.
+
 ### Closed Environment (Indoor)
 
 - Phone fixed in position  
@@ -319,14 +337,32 @@ Generating our dataset was the most challenging part of the project, involving b
 - Object placed on a rotating plate with marked intervals
 - Images captured at each interval while the object rotated and the camera remained stationary
 
+<table>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/0d409065-7341-4596-9005-a83401702a41" width="300"/></td>
+    <td><img src="https://github.com/user-attachments/assets/b0739279-15f4-4584-8820-aba159665287" width="300"/></td>
+    <td><img src="https://github.com/user-attachments/assets/5065d514-d455-4a83-9580-c295304230aa" width="300"/></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Duck(66 Images)</strong></td>
+    <td align="center"><strong>Box(70 Images)</strong></td>
+    <td align="center"><strong>Tin(18 Images)</strong></td>
+  </tr>
+</table>
 
 ### Open Environment (Outdoor)
 
 - Object static  
-- Phone moved around the object to capture images from all angles  
-
-### Preprocessing Step
-
-In both indoor and outdoor datasets, we can **remove the background** from the images as an optional **preprocessing step** to improve reconstruction accuracy. While not mandatory, it significantly reduced noise and improved point cloud clarity.
+- Phone moved around the object to capture images from all angles
+<table align="center">
+ <tr>
+    <td><img src="https://github.com/user-attachments/assets/89f96df4-ab2b-4f0d-a52a-7e4fdbbcb5eb" width="300"/></td>
+    <td><img src="https://github.com/user-attachments/assets/e935ca8e-aa67-432b-9100-4d14c305c95d" width="300"/></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Fountain(62 Images)</strong></td>
+    <td align="center"><strong>Condorcet(43 Images)</strong></td>
+  </tr>
+  </table>
 
 In all cases, we maintained the **same camera settings** as during calibration to ensure consistent and reliable reconstruction.
