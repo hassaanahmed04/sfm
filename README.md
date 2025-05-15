@@ -16,7 +16,7 @@ The flowchart shows the SfM pipeline we followed. In the final step, only one me
 - Ceres Solver [API](https://github.com/hassaanahmed04/sfm/tree/main/Ceres%20Solver)
 - Bundle Adjustment (TRF, LM, Dogbox)  
 - Sequential Triangulation-based Reconstruction
-<img src="./images/Flowchart.png"  align="center" ><br>
+<img src="https://github.com/user-attachments/assets/54b0a477-e2c6-434c-a276-bb401b541968"  align="center" ><br>
 ## Datasets
 
 In this project, we first implemented all the steps of Structure-from-Motion (SfM) on a pre-calibrated dataset, and later extended the pipeline to work with our own custom dataset, which involved camera calibration and careful data collection.
@@ -305,6 +305,7 @@ We used two devices for data collection and calibration:
 - **iPhone 8 Plus**: [Calibration Dataset (37 images)](https://)  
 
 Images of a checkerboard pattern were captured from multiple angles for each device to compute the **intrinsic camera parameters** required for accurate 3D reconstruction.
+
 ---
 
 ## Creating a Custom Dataset
