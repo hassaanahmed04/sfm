@@ -321,13 +321,13 @@ Calibrating our smartphones was crucial for applying **Structure from Motion (Sf
 
 We used two devices for data collection and calibration:
 
-- **OPPO RENO 5**: [Calibration Dataset (16 images)](https://)  
+- **OPPO RENO 5**: [Calibration Dataset (16 images)](https://github.com/hassaanahmed04/sfm/tree/main/calibration_datasets/OppoReno5) 
   - We fixed the following camera settings for consistency (used where applicable):  
     - **ISO**: 100  
     - **Shutter Speed**: 1/20  
     - **Focus**: 0.78  
     - **White Balance**: 5000
-- **iPhone 8 Plus**: [Calibration Dataset (37 images)](https://)  
+- **iPhone 8 Plus**: [Calibration Dataset (37 images)](https://github.com/hassaanahmed04/sfm/tree/main/calibration_datasets/Iphone8Plus)
 
 Images of a checkerboard pattern were captured from multiple angles for each device to compute the **intrinsic camera parameters** required for accurate 3D reconstruction.
 
@@ -357,9 +357,9 @@ In both indoor and outdoor datasets, we can **remove the background** from the i
     <td><img src="https://github.com/user-attachments/assets/5065d514-d455-4a83-9580-c295304230aa" width="300"/></td>
   </tr>
   <tr>
-    <td align="center"><strong>[Duck(66 Images)](https://github.com/hassaanahmed04/sfm/tree/main/Datasets/Duck)</strong></td>
-    <td align="center"><strong>[Box(70 Images)](https://github.com/hassaanahmed04/sfm/tree/main/Datasets/BOX)</strong></td>
-    <td align="center"><strong>[Tin(18 Images)](https://github.com/hassaanahmed04/sfm/tree/main/Datasets/Tin)</strong></td>
+    <td align="center"><strong>Duck(66 Images)</strong></td>
+    <td align="center"><strong>Box(70 Images)</strong></td>
+    <td align="center"><strong>Tin(18 Images)</strong></td>
   </tr>
 </table>
 
