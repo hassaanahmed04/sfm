@@ -296,11 +296,24 @@ Bundle adjustment using TRF and LM methods yields reliable results, but performa
 
 ## Ceres Implementation
 
-We also implemented bundle adjustment using the **Ceres Solver**. Although the current reprojection error remains high, we are actively working on improving it.
+We also implemented bundle adjustment using the **Ceres Solver**. Although the current reprojection error is almost the same as when using `least_squares`, we are actively working on improving it. However, the optimization runtime has significantly decreased—by approximately 80%.
 
-Our implementation differs slightly: we hosted the Ceres bundle adjustment code locally using the **Crow** web framework to create a server, which we call from our main pipeline. 
+Our implementation differs slightly: we hosted the Ceres bundle adjustment code locally using the **Crow** web framework to create a lightweight server, which we call from our main pipeline.
+
+Thanks to this architecture, running the Ceres-based optimization is now significantly simplified—**there's no longer any need to manually bind C++ code to Python**. The Crow API abstracts the underlying native implementation, making integration seamless and more developer-friendly.
 
 You can run the Ceres-based optimization via the provided local [link](https://github.com/hassaanahmed04/sfm/tree/main/Ceres%20Solver).
+
+<table>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/a3037c29-032f-4f92-a919-70b249ee5f77" width="450"/></td>    
+    <td><img src="https://github.com/user-attachments/assets/8992a613-9ad7-4f8e-972e-22202ea0bc68" width="450"/></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Reprojection Error</strong></td>
+    <td align="center"><strong>3D Point Cloud</strong></td>
+  </tr>
+</table>
 
 ## Camera Calibration for Custom Dataset
 
