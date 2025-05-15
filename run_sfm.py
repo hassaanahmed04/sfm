@@ -179,16 +179,46 @@ class SFMPipeline:
             self.update_point_cloud(img_2, cm_mask_1.T)
 
     def update_point_cloud(self, img, points):
-        if self.pts_3d.ndim == 3:
-            pts_to_add = self.pts_3d[:, 0, :]
-        else:
-            pts_to_add = self.pts_3d
 
-        self.all_pts = np.vstack((self.all_pts, pts_to_add))
-        
-        left_pts = np.array(points, dtype=np.int32)
-        colors = np.array([img[p[1], p[0]] for p in left_pts])
-        self.all_colors = np.vstack((self.all_colors, colors))
+        if self.method =="ceres":
+            if self.pts_3d.ndim == 3:
+                pts_to_add = self.pts_3d[:, 0, :]
+            else:
+                pts_to_add = self.pts_3d
+
+            self.all_pts = np.vstack((self.all_pts, pts_to_add))
+
+            left_pts = np.array(points, dtype=np.int32)
+
+            # Get image dimensions
+            h, w = img.shape[:2]
+
+            # Filter points within image bounds
+            valid_pts = []
+            valid_colors = []
+
+            for i, p in enumerate(left_pts):
+                x, y = p[0], p[1]
+                if 0 <= x < w and 0 <= y < h:
+                    valid_pts.append(pts_to_add[i])
+                    valid_colors.append(img[y, x])
+
+            if valid_pts:
+                self.all_pts = np.vstack((self.all_pts, valid_pts))
+                self.all_colors = np.vstack((self.all_colors, valid_colors))
+            
+        else:
+            if self.pts_3d.ndim == 3:
+                pts_to_add = self.pts_3d[:, 0, :]
+            else:
+                pts_to_add = self.pts_3d
+    
+            self.all_pts = np.vstack((self.all_pts, pts_to_add))
+            
+            left_pts = np.array(points, dtype=np.int32)
+            colors = np.array([img[p[1], p[0]] for p in left_pts])
+            self.all_colors = np.vstack((self.all_colors, colors))
+
 
     def update_error_plot(self, err):
         self.error_list.append(err)
@@ -203,7 +233,7 @@ class SFMPipeline:
 
     def run(self, method="none"):
         cv2.namedWindow('image', cv2.WINDOW_NORMAL)
-        
+        self.method=method
         # Initialize data structures
         self.poses, self.trans_mat_0, self.trans_mat_1, self.cam_pose_0, self.cam_pose_1 = self.initialize_camera_poses()
         self.all_pts = np.zeros((1, 3))
